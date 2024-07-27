@@ -8,9 +8,17 @@ module.exports = app => {
 
     route.post('/view', courseController.view);
 
-    route.post('/update', courseController.update);
+    route.post('/detail/:id', courseController.detail);
 
-    route.delete('/delete/:id', courseController.delete);
+    route.put('/update', courseController.update);
+
+    route.put('/change-status', courseController.changeStatus);
+
+
+    route.post('/delete', courseController.delete);
+
+    route.post('/multiple-delete', courseController.multipleDelete);
+
 
 
     app.use('/api/backend/courses',route);

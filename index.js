@@ -14,8 +14,12 @@ server.get('/', (request,response)=>{
     
 });
 
+// backend side URLs
 require('./src/routes/backend/courses.routes')(server);
 require('./src/routes/backend/videos.routes')(server);
+
+// frontend side URLs
+require('./src/routes/frontend/courses.routes')(server);
 
 
 server.get('*', (request,response)=>{

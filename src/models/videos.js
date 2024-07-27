@@ -9,7 +9,7 @@ const videosSchema = new mongoose.Schema({
     topic : {
         type : String,
         required : [true, 'Course Topic is required'],
-        match : /^[a-zA-Z ]{2,20}$/
+        match : /^[a-zA-Z ]{2,50}$/
     },
     link : {
         type : String,
