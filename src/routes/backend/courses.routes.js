@@ -14,7 +14,6 @@ module.exports = app => {
 
     route.put('/change-status', courseController.changeStatus);
 
-
     route.post('/delete', courseController.delete);
 
     route.post('/multiple-delete', courseController.multipleDelete);
