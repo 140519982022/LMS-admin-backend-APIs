@@ -8,6 +8,8 @@ server.use(cors());
 server.use(express.json());
 server.use(express.urlencoded( {extended : true} ));
 
+server.use("/uploads/courses",express.static('uploads/courses'))
+
 server.get('/', (request,response)=>{
     console.log("Server Working Fine!!!");
     response.send("Server Working Fine!!!");
@@ -20,6 +22,8 @@ require('./src/routes/backend/videos.routes')(server);
 
 // frontend side URLs
 require('./src/routes/frontend/courses.routes')(server);
+require('./src/routes/frontend/email/regMail.routes')(server);
+
 
 
 server.get('*', (request,response)=>{

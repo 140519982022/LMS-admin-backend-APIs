@@ -8,9 +8,21 @@ module.exports = app => {
 
     route.post('/view', videosController.view);
 
-    route.post('/update', videosController.update);
+    route.post('/course-category', videosController.courseCategories);
+
+    route.put('/change-status', videosController.changeStatus);
+
+    route.post('/multiple-delete', videosController.multipleDelete);
+
+    route.post('/detail/:id', videosController.detail);
+
+    route.put('/update', videosController.update);
+
+
+
 
     route.delete('/delete/:id', videosController.delete);
+
 
 
     app.use('/api/backend/videos',route);

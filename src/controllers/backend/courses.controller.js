@@ -2,7 +2,7 @@ const coursesModel = require('../../models/courses')
 
 // insert new course detail / record
 exports.add = async(request,response)=>{
-    console.log("inside controller!!")
+    console.log(request.file)
 
     var data = new coursesModel({
         name : request.body.name,
@@ -10,7 +10,7 @@ exports.add = async(request,response)=>{
         duration : request.body.duration,
         order : request.body.order ?? 1,
         description : request.body.description,
-        image : request.body.image,
+        image : request.file.filename,
         status : request.body.status ?? 1
     });
 
@@ -110,6 +110,7 @@ exports.view = async(request,response)=>{
             var res = {
                 status:true,
                 message:"Record fetched successfully",
+                imagepath:'http://localhost:8000/uploads/courses/',
                 data:result
             }
 
@@ -183,9 +184,19 @@ exports.update = async(request,response)=>{
         duration : request.body.duration,
         order : request.body.order ?? 1,
         description : request.body.description,
-        image : request.body.image,
         status : request.body.status ?? 1
     };
+
+    if (request.file != undefined) {
+        if (request.file.filename != '') {
+
+            data.image = request.file.filename
+            
+        }
+    }
+    // console.log(request.file)
+
+    console.log(data)
 
     await coursesModel.updateOne(
         {
@@ -259,7 +270,7 @@ exports.changeStatus = async(request,response)=>{
             if (result != '') {
                 var res = {
                     status:true,
-                    message:"Record update successfully",
+                    message:"Status update successfully",
                     data:result
                 }
             }else{
