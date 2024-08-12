@@ -23,6 +23,7 @@ require('./src/routes/backend/videos.routes')(server);
 // frontend side URLs
 require('./src/routes/frontend/courses.routes')(server);
 require('./src/routes/frontend/email/regMail.routes')(server);
+require('./src/routes/frontend/users.routes')(server);
 
 
 

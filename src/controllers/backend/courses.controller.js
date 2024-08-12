@@ -1,10 +1,10 @@
-const coursesModel = require('../../models/courses')
+const Course = require('../../models/courses')
 
 // insert new course detail / record
 exports.add = async(request,response)=>{
     console.log(request.file)
 
-    var data = new coursesModel({
+    var data = new Course({
         name : request.body.name,
         price : request.body.price,
         duration : request.body.duration,
@@ -46,7 +46,7 @@ exports.view = async(request,response)=>{
     //     try {
 
     //         // collect all records from db
-    //     var  result = await coursesModel.find()
+    //     var  result = await Course.find()
 
     //     var userData = {
     //         status:true,
@@ -105,7 +105,7 @@ exports.view = async(request,response)=>{
     // console.log(condition)
 
 
-    await coursesModel.find(condition).sort({order:'asc'},{_id:'desc'}).then((result)=>{
+    await Course.find(condition).sort({order:'asc'},{_id:'desc'}).then((result)=>{
         if (result.length > 0) {
             var res = {
                 status:true,
@@ -142,7 +142,7 @@ exports.view = async(request,response)=>{
 // get perticular course detail by using id
 exports.detail = async(request,response)=>{
 
-    await coursesModel.findById(request.params.id).then(
+    await Course.findById(request.params.id).then(
         (result)=>{
             if (result != '') {
                 var res = {
@@ -198,7 +198,7 @@ exports.update = async(request,response)=>{
 
     console.log(data)
 
-    await coursesModel.updateOne(
+    await Course.updateOne(
         {
             _id : request.body.id
         },
@@ -240,7 +240,7 @@ exports.update = async(request,response)=>{
 // update perticular key i.e "status" by using id and updated status value
 exports.changeStatus = async(request,response)=>{
 
-    const courseData = await coursesModel
+    const courseData = await Course
     .findOne(
         {
             _id : request.body.id
@@ -255,7 +255,7 @@ exports.changeStatus = async(request,response)=>{
         response.send(res)
     }
 
-    await coursesModel.updateOne(
+    await Course.updateOne(
         
         {
             _id : request.body.id
@@ -300,7 +300,7 @@ exports.changeStatus = async(request,response)=>{
 exports.delete = async(request,response)=>{
 
     
-    const courseData = await coursesModel
+    const courseData = await Course
     .findOne(
         {
             _id : request.body.id,
@@ -316,7 +316,7 @@ exports.delete = async(request,response)=>{
         response.send(res)
     }
 
-    await coursesModel.updateOne(
+    await Course.updateOne(
         
         {
             _id : request.body.id
@@ -362,7 +362,7 @@ exports.delete = async(request,response)=>{
 
 exports.multipleDelete = async(request,response)=>{
 
-    await coursesModel.updateMany(
+    await Course.updateMany(
         
         {
             _id : {$in : request.body.ids}

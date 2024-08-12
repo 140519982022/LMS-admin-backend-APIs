@@ -1,11 +1,12 @@
-const videosModel = require('../../models/videos')
-const coursesModel = require('../../models/courses')
+const Videos = require('../../models/videos')
+const Course = require('../../models/courses')
 
 exports.add = async(request,response)=>{
     console.log("inside controller!!")
 
-    var data = new videosModel({
-        category : request.body.category,
+    var data = new Videos({
+        // category : request.body.category,
+        category_id : request.body.category_id,
         topic : request.body.topic,
         link : request.body.link,
         status : request.body.status ?? 1
@@ -44,75 +45,113 @@ exports.view = async(request,response)=>{
         deleted_at : null
     } 
 
-    if (request.body.name != undefined) {
-         if(request.body.name != ''){
-            condition.name = new RegExp(request.body.name,'i')
+
+    // if (request.body.name != undefined) {
+    //      if(request.body.name != ''){
+    //         condition.name = new RegExp(request.body.name,'i')
             
-        }
+    //     }
         
-    }
+    // }
    
 
-    if (request.body.price != undefined) {
-    if(request.body.price != ''){
-        condition.price = request.body.price
+    // if (request.body.price != undefined) {
+    // if(request.body.price != ''){
+    //     condition.price = request.body.price
         
-    }
-    }
+    // }
+    // }
 
-    if (request.body.duration != undefined) {
-    if(request.body.duration != ''){
-        condition.duration = new RegExp(request.body.duration,'i')
+    // if (request.body.duration != undefined) {
+    // if(request.body.duration != ''){
+    //     condition.duration = new RegExp(request.body.duration,'i')
         
-    }
-    }
+    // }
+    // }
 
-    if (request.body.status != undefined) {
-    if(request.body.status != ''){
-        condition.status = new RegExp(request.body.status,'i')
-    }
-    }
+    // if (request.body.status != undefined) {
+    // if(request.body.status != ''){
+    //     condition.status = new RegExp(request.body.status,'i')
+    // }
+    // }
 
     // console.log(condition)
 
+    try {
+        var videosData = await Videos.find(condition)
+        .populate({
+            path : 'category_id',
+            select: { '_id': 1,'name':1,'image':1},
+        } )
+        // .populate({ path: 'categories', options: {strictPopulate: false} })
+        .exec();
 
-    await videosModel.find(condition).sort({_id:'asc'}).then((result)=>{
-        if (result.length > 0) {
+        if(videosData.length != 0){
             var res = {
-                status:true,
-                message:"Record fetched successfully",
-                data:result
+                status : true,
+                message : 'record found successfully !!',
+                data : videosData
             }
-
-        response.send(res)
-
-        }else{
+            
+            response.send(res);
+        } else {
             var res = {
-                status:false,
-                message:"No Record Found",
-                data:''
+                status : false,
+                message : 'No record found !!'
             }
-
-            response.send(res)
+            
+            response.send(res);
         }
 
-
-    }).catch((error)=>{
+    } catch (error) {
+        console.log(error);
         var res = {
-            status:false,
-            message:"somthing went wrong"
+            status : false,
+            message : 'Something went wrong !!'
         }
+        
+        response.send(res);
 
-        response.send(res)
+    } 
 
-    })
+
+    // await Videos.find(condition).sort({_id:'asc'}).then((result)=>{
+    //     if (result.length > 0) {
+    //         var res = {
+    //             status:true,
+    //             message:"Record fetched successfully",
+    //             data:result
+    //         }
+
+    //     response.send(res)
+
+    //     }else{
+    //         var res = {
+    //             status:false,
+    //             message:"No Record Found",
+    //             data:''
+    //         }
+
+    //         response.send(res)
+    //     }
+
+
+    // }).catch((error)=>{
+    //     var res = {
+    //         status:false,
+    //         message:"somthing went wrong"
+    //     }
+
+    //     response.send(res)
+
+    // })
     
 }
 
 exports.courseCategories = async(request,response)=>{
     var condition = {
         deleted_at : null,
-        status : true
+        // status : true
     } 
 
     if (request.body.name != undefined) {
@@ -147,7 +186,7 @@ exports.courseCategories = async(request,response)=>{
     // console.log(condition)
 
 
-    await coursesModel.find(condition).sort({_id:'asc'}).then((result)=>{
+    await Course.find(condition).sort({_id:'asc'}).then((result)=>{
         if (result.length > 0) {
             var res = {
                 status:true,
@@ -182,7 +221,7 @@ exports.courseCategories = async(request,response)=>{
 
 exports.changeStatus = async(request,response)=>{
 
-    const courseData = await videosModel
+    const courseData = await Videos
     .findOne(
         {
             _id : request.body.id
@@ -197,7 +236,7 @@ exports.changeStatus = async(request,response)=>{
         response.send(res)
     }
 
-    await videosModel.updateOne(
+    await Videos.updateOne(
         
         {
             _id : request.body.id
@@ -240,7 +279,7 @@ exports.changeStatus = async(request,response)=>{
 
 exports.multipleDelete = async(request,response)=>{
 
-    await videosModel.updateMany(
+    await Videos.updateMany(
         
         {
             _id : {$in : request.body.ids}
@@ -285,7 +324,7 @@ exports.multipleDelete = async(request,response)=>{
 
 exports.detail = async(request,response)=>{
 
-    await videosModel.findById(request.params.id).then(
+    await Videos.findById(request.params.id).then(
         (result)=>{
             if (result != '') {
                 var res = {
@@ -321,7 +360,8 @@ exports.detail = async(request,response)=>{
 exports.update = async(request,response)=>{
 
     var data = {
-        category : request.body.category,
+        // category : request.body.category,
+        category_id : request.body.category_id,
         topic : request.body.topic,
         link : request.body.link,
         status : request.body.status ?? 1
@@ -352,7 +392,7 @@ exports.update = async(request,response)=>{
     console.log(data)
 
     
-    await videosModel.updateOne(
+    await Videos.updateOne(
         {
             _id : request.body.id
         },

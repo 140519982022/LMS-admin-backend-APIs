@@ -1,10 +1,18 @@
 const mongoose = require('mongoose')
+const Course = require('./courses')
+const { Schema } = mongoose;
 
 const videosSchema = new mongoose.Schema({
     category : {
-        type : String,
-        required : [true, 'Course Category is required'],
+        // type : Schema.Types.ObjectId,
+        // ref: 'Course'
+        type:String,
+        // required : [true, 'Course Category is required'],
         // match : /^[a-zA-Z ]{2,20}$/
+    },
+    category_id : {
+        type : Schema.Types.ObjectId,
+        ref: 'Course'
     },
     topic : {
         type : String,
@@ -35,6 +43,6 @@ const videosSchema = new mongoose.Schema({
     }
 })
 
-const courseModel = mongoose.model('videos',videosSchema);
+const Videos = mongoose.model('videos',videosSchema);
 
-module.exports = courseModel;
+module.exports = Videos;

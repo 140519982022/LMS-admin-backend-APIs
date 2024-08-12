@@ -1,6 +1,44 @@
 const coursesModel = require('../../models/courses');
+var jwt = require('jsonwebtoken');
+var secretKey = '1234567890'
+
 
 exports.view = async(request,response)=>{
+
+    // console.log(request.headers.authorization.split(' ')[1])
+
+    if (request.headers.authorization.split(' ')[1] == undefined) {
+        var res = {
+            status:false,
+            message:"Token Required",
+        }
+        response.send(res)
+    }
+
+    if (request.headers.authorization.split(' ')[1] == '') {
+        var res = {
+            status:false,
+            message:"Token Required",
+        }
+        response.send(res)
+    }
+
+    // verify a token symmetric
+    jwt.verify(request.headers.authorization.split(' ')[1], secretKey, function(error, result) {
+
+        if(error) {
+            var res = {
+                status:false,
+                message:"Incorrect Token",
+            }
+            response.send(res)
+            
+        }else{
+            var userDetails = result
+            console.log(result)
+        }
+        
+    });
 
     var condition = {
         deleted_at : null,
@@ -33,11 +71,12 @@ exports.view = async(request,response)=>{
     // console.log(condition)
 
 
-    await coursesModel.find(condition).sort({order:'asc'},{_id:'desc'}).then((result)=>{
+    await coursesModel.find(condition).sort({order:'asc'},{_id:'desc'}).then((result,userDetails)=>{
         if (result.length > 0) {
             var res = {
                 status:true,
                 message:"Record fetched successfully",
+                userDetails:userDetails,
                 data:result
             }
 
