@@ -8,7 +8,6 @@ const videosSchema = new mongoose.Schema({
         // ref: 'Course'
         type:String,
         // required : [true, 'Course Category is required'],
-        // match : /^[a-zA-Z ]{2,20}$/
     },
     category_id : {
         type : Schema.Types.ObjectId,

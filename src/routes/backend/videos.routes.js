@@ -18,10 +18,11 @@ module.exports = app => {
 
     route.put('/update', videosController.update);
 
+    route.post('/edit-course-category/:id', videosController.editCourseCategories);
 
 
 
-    route.delete('/delete/:id', videosController.delete);
+    // route.delete('/delete/:id', videosController.delete);
 
 
 

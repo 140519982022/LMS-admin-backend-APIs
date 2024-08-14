@@ -45,7 +45,6 @@ exports.view = async(request,response)=>{
         deleted_at : null
     } 
 
-
     // if (request.body.name != undefined) {
     //      if(request.body.name != ''){
     //         condition.name = new RegExp(request.body.name,'i')
@@ -151,7 +150,7 @@ exports.view = async(request,response)=>{
 exports.courseCategories = async(request,response)=>{
     var condition = {
         deleted_at : null,
-        // status : true
+        status : true
     } 
 
     if (request.body.name != undefined) {
@@ -368,7 +367,7 @@ exports.update = async(request,response)=>{
     };
 
     
-    if (request.body.category == undefined) {
+    if (request.body.category_id == undefined) {
         var res = {
             status:false,
             message:"No Record updated",
@@ -377,7 +376,7 @@ exports.update = async(request,response)=>{
         response.send(res)
    }
    
-   if(request.body.category  == ''){
+   if(request.body.category_id  == ''){
         var res = {
             status:false,
             message:"No Record updated",
@@ -431,6 +430,39 @@ exports.update = async(request,response)=>{
     
 }
 
-exports.delete = async(request,response)=>{
+exports.editCourseCategories = async(request,response)=>{
+    await Course.findById(request.params.id).then(
+        (result)=>{
+            if (result != '') {
+                var res = {
+                    status:true,
+                    message:"Record fetched successfully",
+                    data:result
+                }
+            }else{
+                var res = {
+                    status:false,
+                    message:"No Record Found",
+                    data:''
+                }
+    
+            }
+    
+            response.send(res)
+
+        }
+    ).catch((error)=>{
+        var res = {
+            status:false,
+            message:"somthing went wrong"
+        }
+
+        response.send(res)
+
+    })
     
 }
+
+// exports.delete = async(request,response)=>{
+    
+// }
